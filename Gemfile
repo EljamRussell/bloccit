@@ -48,6 +48,10 @@ group :development do
   gem 'sqlite3'
 end
 
+group :development, :test do
+  gem 'pry-rails'
+end
+
 group :production do
   gem 'pg'
   gem 'rails_12factor'
