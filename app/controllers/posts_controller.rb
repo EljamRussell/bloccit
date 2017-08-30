@@ -3,6 +3,11 @@ class PostsController < ApplicationController
     #declare an instance var @posts & assign it a collection of Post objects
     # using the all method, provided by ActiveRecord
     @posts = Post.all
+    @post.each_with_index do |post, index|
+      if index % 5 == 0
+        post.title = "SPAM"
+      end
+    end
   end
 
   def show
