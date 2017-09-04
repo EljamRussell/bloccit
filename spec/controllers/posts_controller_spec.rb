@@ -21,24 +21,24 @@ RSpec.describe PostsController, type: :controller do
   end
 
   describe "GET show" do
-       it "returns http success" do
-   # pass {id: my_post_id} to show as parameter, parms are passed to the params hash
-         get :show, params: { id: my_post.id }
-         expect(response).to have_http_status(:success)
-       end
-       it "renders the #show view" do
-   # expect the respose to return the show view using render_template
-         get :show, params: { id: my_post.id }
-         expect(response).to render_template :show
-       end
+    it "returns http success" do
+      # pass {id: my_post_id} to show as parameter, parms are passed to the params hash
+      get :show, params: { id: my_post.id }
+      expect(response).to have_http_status(:success)
+    end
+    it "renders the #show view" do
+      # expect the respose to return the show view using render_template
+      get :show, params: { id: my_post.id }
+      expect(response).to render_template :show
+    end
 
-       it "assigns my_post to @post" do
-         get :show, params: { id: my_post.id }
-   #post should equal my_post because we call show with id of my_post
-         expect(assigns(:post)).to eq(my_post)
-       end
-     end
-     
+    it "assigns my_post to @post" do
+      get :show, params: { id: my_post.id }
+      #post should equal my_post because we call show with id of my_post
+      expect(assigns(:post)).to eq(my_post)
+    end
+  end
+
   #  new - new and unsaved Post is created (create would be saved in database)
   describe "GET new" do
     it "returns http success" do
@@ -78,6 +78,68 @@ RSpec.describe PostsController, type: :controller do
     it "redirects to the new post" do
       post :create, params: { post: { title: RandomData.random_sentence, body: RandomData.random_paragraph } }
       expect(response).to redirect_to Post.last
+    end
+  end
+
+  describe "GET edit" do
+    it "returns http success" do
+      get :edit, params: { id: my_post.id }
+      expect(response).to have_http_status(:success)
+    end
+    # expect the edit view to render
+    it "renders the #edit view" do
+      get :edit, params: { id: my_post.id }
+      expect(response).to render_template :edit
+    end
+    # edit should assign the post to be updated to @post
+    it "assigns post to be updated to @post" do
+      get :edit, params: { id: my_post.id }
+
+      post_instance = assigns(:post)
+
+      expect(post_instance.id).to eq my_post.id
+      expect(post_instance.title).to eq my_post.title
+      expect(post_instance.body).to eq my_post.body
+    end
+  end
+
+  describe "PUT update" do
+    it "updates post with expected attributes" do
+      new_title = RandomData.random_sentence
+      new_body = RandomData.random_paragraph
+      put :update, params: { id: my_post.id, post: {title: new_title, body: new_body } }
+      # test that @post was updated with title and body passed in
+      # and that @post's id was not changed
+      updated_post = assigns(:post)
+      expect(updated_post.id).to eq my_post.id
+      expect(updated_post.title).to eq new_title
+      expect(updated_post.body).to eq new_body
+    end
+
+    it "redirects to the updated post" do
+      new_title = RandomData.random_sentence
+      new_body = RandomData.random_paragraph
+
+      # test to be redirected to the post's show view after update
+      put :update, params: { id: my_post.id, post: {title: new_title, body: new_body } }
+      expect(response).to redirect_to my_post
+    end
+  end
+  
+  describe "DELETE destroy" do
+    it "deletes the post" do
+      delete :destroy, params: { id: my_post.id }
+      # search the db for post with id equal to my_post.id
+      # returns an array, assign size of array to count
+      # expect count to equal zero, which means that post was deleted
+      count = Post.where({id: my_post.id}).size
+      expect(count).to eq 0
+    end
+
+    it "redirects to posts index" do
+      delete :destroy, params: { id: my_post.id }
+      # expect to be redirected to posts index view after post was deleted
+      expect(response).to redirect_to posts_path
     end
   end
 end
