@@ -10,7 +10,7 @@ class User < ApplicationRecord
   # ensure that updated password is 6 char long,
   # allow_blank: true skips validation if no password is given
   # allowing changing other attributes on user without updating password
-  validates :password, presence: true, length: { minimum: 6 }, if: "password_digest.nil?"
+  validates :password, presence: true, length: { minimum: 6 }, unless: :password_digest
   validates :password, length: { minimum: 6 }, allow_blank: true
   # 5 validate email present, unique, case insensitive, min/max length, formatted for email
   validates :email,
@@ -22,4 +22,14 @@ class User < ApplicationRecord
   #  to add methods to set and authenticate against a BCrypt password
   # requires a password_digest attribute
   has_secure_password
+
+  def full_name
+    if name #help from video - rspec kept showing an error without this. If there's no name, the function won't be able to do anything.
+      full_name_array = []
+      name.split.each do |name_seg|
+        full_name_array << name_seg.capitalize
+      end
+      self.name = full_name_array.join(" ") #help from video - I tried `name = ...` why is `self.name` required?
+    end
+  end
 end
