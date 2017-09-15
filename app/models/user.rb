@@ -10,7 +10,7 @@ class User < ApplicationRecord
   # ensure that updated password is 6 char long,
   # allow_blank: true skips validation if no password is given
   # allowing changing other attributes on user without updating password
-  validates :password, presence: true, length: { minimum: 6 }, if: "password_digest.nil?"
+  validates :password, presence: true, length: { minimum: 6 }, unless: :password_digest
   validates :password, length: { minimum: 6 }, allow_blank: true
   # 5 validate email present, unique, case insensitive, min/max length, formatted for email
   validates :email,
