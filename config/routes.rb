@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 
   #create new and create actions, only hash key prevents unnec. route code
   resources :users, only:[:new, :create]
+  post 'users/confirm' => 'users#confirm'
 
   # remove the get "welcome/index" because the root is declared as index
   # modify the about route to allow users to visit/about rather than /welcome/about
