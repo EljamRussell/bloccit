@@ -2,6 +2,10 @@ class PostsController < ApplicationController
   #use a before_action filter to call the require_sign_in method before each of our controller actions,
   #except for the show action.
   before_action :require_sign_in, except: :show
+  # before_action :authorize_moderator, only: [:create, :new, :update, :edit]
+  # if current-user isn't authorized based on their role, redirect to post show view
+  before_action :authorize_user, except: [:show, :new, :create]
+
   def show
     # find the post that corresponds to the id in the params that were passed to
     # show and assign it to @post.Populate the instance var in a SINGLE post
@@ -11,7 +15,7 @@ class PostsController < ApplicationController
   def new
     #create an instance var, @post
     #then assign it an empty post returned by Post.new
-    @topic = Topic.find(params[:topic_id])
+    @topic = Topic.find(params[:topic_id])    # added to for nesting posts in topic
     @post = Post.new
   end
 
@@ -70,5 +74,14 @@ class PostsController < ApplicationController
    private
    def post_params
      params.require(:post).permit(:title, :body)
+   end
+
+def authorize_user
+     post = Post.find(params[:id])
+ # redirect the user unless they own the post they're attempting to modify, or they're an admin.
+     unless current_user == post.user || current_user.admin?
+       flash[:alert] = "You must be an admin to do that."
+       redirect_to [post.topic, post]
+     end
    end
 end

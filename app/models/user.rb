@@ -4,7 +4,8 @@ class User < ApplicationRecord
   # self_email = email.downase is the code that will run when the callback executes
   # callback are hooks that trigger logic before/after an alteration of an object’s state
   before_save { self.email = email.downcase if email.present? }
-
+  # the code in {...||...} is shorthand for self.role = :member if self.role.nil?
+  before_save { self.role ||= :member }
   # 3 use Ruby’s validates function to ensure name is present & min/max length
   validates :name, length: { minimum: 1, maximum: 100 }, presence: true
   # 4 validate with that password is valid,
@@ -23,4 +24,5 @@ class User < ApplicationRecord
   #  to add methods to set and authenticate against a BCrypt password
   # requires a password_digest attribute
   has_secure_password
+  enum role: [:member, :admin]
 end
