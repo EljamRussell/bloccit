@@ -8,10 +8,12 @@ RSpec.describe Post, type: :model do
    let(:body) { RandomData.random_paragraph }
    # create a parent topic first
    let(:topic) { Topic.create!(name: name, description: description) }
-   # create a posts with topic parent, CHAINED METHOD CALL
+   # create a user to associate with a test post
    let(:user) { User.create!(name: "Bloccit User", email: "user@bloccit.com", password: "helloworld") }
+   # associate user with post when creating the test post
    let(:post) { topic.posts.create!(title: title, body: body, user: user) }
 
+   it { is_expected.to have_many(:comments) }
    it { is_expected.to belong_to(:topic) }
    it { is_expected.to belong_to(:user) }
 
