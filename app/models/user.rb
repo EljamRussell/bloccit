@@ -4,6 +4,7 @@ class User < ApplicationRecord
   # callback are hooks that trigger logic before/after an alteration of an object’s state
   has_many :posts, dependent: :destroy
   has_many :comments, dependent: :destroy
+  has_many :votes, dependent: :destroy
   before_save { self.email = email.downcase if email.present? }
 
   # the code in {...||...} is shorthand for self.role = :member if self.role.nil?
