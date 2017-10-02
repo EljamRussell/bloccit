@@ -21,9 +21,9 @@
       <% if current_user %>
       <!-- render the comment form, use comments/form because
       this renders the comment form from a post view -->
-          <div class="col-md-6">
-            <%= render 'comments/form', comment: Comment.new, post: @post %>
-          </div>
+      <div class="col-md-6">
+        <%= render 'comments/form', comment: Comment.new, post: @post %>
+      </div>
       <% end %>
       <div class="col-md-6">
         <% if user_is_authorized_for_post?(@post) %>
@@ -48,6 +48,9 @@
                 </small>
               </div>
             </h3>
+            <% if current_user %>
+            <%= render partial: 'favorites/favorite', locals: { post: @post } %>
+            <% end %>
           </div>
         </div>
       </div>
