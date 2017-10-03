@@ -11,15 +11,17 @@ Rails.application.routes.draw do
   #  add create and destroy routes for comments
   #  comments will display on posts show view, so index, new arent needed
   #  also users won't view or edit indiv comments, so show, update & edit aren't needed
+
   resources :posts, only: [] do
     resources :comments, only: [:create, :destroy]
     resources :favorites, only: [:create, :destroy]
+
     post '/up-vote' => 'votes#up_vote', as: :up_vote
     post '/down-vote' => 'votes#down_vote', as: :down_vote
   end
 
   #create new and create actions, only hash key prevents unnec. route code
-  resources :users, only:[:new, :create]
+  resources :users, only: [:new, :create, :show]
 
   resources :sessions, only: [:new, :create, :destroy]
 
