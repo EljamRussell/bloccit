@@ -16,32 +16,31 @@
 
       <div class="pull-right user-info">
         <% if current_user %>
-        <li class="pull-right"><%= link_to "Sign Out", session_path(current_user), method: :delete %></li>
-        <!-- 9  use image_tag to populate with result of avatar_url
-        set class to gravatar which will style the avatar -->
-        <li class="pull-right"><%= image_tag current_user.avatar_url(48) %></li>
-        <li class="pull-right"><%= link_to current_user.name, user_path(current_user) %></li>
+          <li class="pull-right"><%= link_to "Sign Out", session_path(current_user), method: :delete %></li>
+          <!-- 9  use image_tag to populate with result of avatar_url
+          set class to gravatar which will style the avatar -->
+          <li class="pull-right"><%= image_tag current_user.avatar_url(48) %></li>
+          <li class="pull-right"><%= link_to current_user.name, user_path(current_user) %></li>
+        <% else %>
+          <%= link_to "Sign In", new_session_path %> or
+          <%= link_to "Sign Up", new_user_path %>
+        <% end %>
       </div>
-      <% else %>
-      <%= link_to "Sign In", new_session_path %> or
-      <%= link_to "Sign Up", new_user_path %>
-      <% end %>
-    </div>
-  </ul>
+    </ul>
 
-  <% if flash[:notice] %>
-  <div class="alert alert-success">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <%= flash[:notice] %>
-  </div>
-  <% elsif flash[:alert] %>
-  <div class="alert alert-warning">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <%= flash[:alert] %>
-  </div>
-  <% end %>
+    <% if flash[:notice] %>
+      <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <%= flash[:notice] %>
+      </div>
+    <% elsif flash[:alert] %>
+      <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
 
-  <%= yield %>
-</div>
+    <%= yield %>
+  </div>
 </body>
 </html>

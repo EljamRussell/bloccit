@@ -22,8 +22,11 @@
  </div>
 
  <!-- display all of the use's posts and comments using partials -->
- <h2>Posts</h2>
- <%= render @user.posts %>
+<%= show_posts_and_comments(@user) %>
 
- <h2>Comments</h2>
- <%= render @user.comments %>
+<h2>Favorites</h2>
+<% if @user.favorites.any? %>
+    <%= render @user.favorites.collect(&:post) %>
+<% else %>
+    <p><%= @user.name %> has not favorited any posts... yet.</p>
+<% end %>
